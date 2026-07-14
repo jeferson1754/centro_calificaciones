@@ -184,11 +184,19 @@
                 padding: 1rem 0.5rem;
             }
         }
+
+        .last-update {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Calificaciones Generales</h1>
+        <p class="last-update" id="fecha-actualizacion">Cargando fecha de actualización...</p>
     </div>
 
     <div class="grid-container">
@@ -196,14 +204,14 @@
         <div class="grid-item">
             <div class="loading-placeholder"></div>
             <a href="https://inventarioncc.infinityfreeapp.com/Anime/Calificaciones/calificaciones.php" target="_blank">
-                <img src="./Imagenes/anime.jpg" alt="Anime" />
+                <img src="https://raw.githubusercontent.com/jeferson1754/capturas-calificaciones/main/Imagenes/anime.jpg" alt="Anime" />
                 <div class="site-title">Calificaciones de Anime</div>
             </a>
         </div>
         <div class="grid-item">
             <div class="loading-placeholder"></div>
             <a href="https://inventarioncc.infinityfreeapp.com/Manga/Calificaciones/calificaciones.php" target="_blank">
-                <img src="./Imagenes/mangas.jpg" alt="Anime" />
+                <img src="https://raw.githubusercontent.com/jeferson1754/capturas-calificaciones/main/Imagenes/mangas.jpg" alt="Manga" />
                 <div class="site-title">Calificaciones de Mangas</div>
             </a>
         </div>
@@ -211,12 +219,41 @@
         <div class="grid-item">
             <div class="loading-placeholder"></div>
             <a href="https://inventarioncc.infinityfreeapp.com/Series/Calificaciones/calificaciones.php" target="_blank">
-                <img src="./Imagenes/series.jpg" alt="Anime" />
+                <img src="https://raw.githubusercontent.com/jeferson1754/capturas-calificaciones/main/Imagenes/series.jpg" alt="Series" />
                 <div class="site-title">Calificaciones de Series</div>
             </a>
         </div>
         
         
     </div>
+
+    <script>
+        const usuarioGithub = 'jeferson1754';
+        const repoGithub = 'capturas-calificaciones';
+
+        async function obtenerFechaActualizacion() {
+            try {
+                // Consultamos la API de GitHub para ver el último commit de la rama principal
+                const response = await fetch(`https://api.github.com/repos/${usuarioGithub}/${repoGithub}/commits/main`);
+                if (!response.ok) throw new Error('Error al conectar con GitHub');
+                
+                const data = await response.json();
+                const fechaISO = data.commit.committer.date; // Formato: "2026-07-14T12:00:00Z"
+                
+                // Formateamos la fecha a DD/MM/AAAA
+                const fecha = new Date(fechaISO);
+                const dia = String(fecha.getDate()).padStart(2, '0');
+                const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                const anio = fecha.getFullYear();
+                
+                document.getElementById('fecha-actualizacion').innerText = `Actualizado el ${dia}/${mes}/${anio}`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('fecha-actualizacion').innerText = 'Actualizado recientemente';
+            }
+        }
+
+        obtenerFechaActualizacion();
+    </script>
 </body>
 </html>
